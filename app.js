@@ -2,11 +2,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const helmet = require("helmet");
+const morgan = require("morgan");
 
 require("dotenv").config();
 
 const saucesRoutes = require("./routes/sauces");
 const userRoutes = require("./routes/user");
+
 const app = express();
 
 mongoose
@@ -15,6 +17,7 @@ mongoose
   .catch(() => console.log("Connexion à MongoDB échouée !"));
 
 app.use(helmet());
+app.use(morgan("short"));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -24,10 +27,11 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/images", express.static(path.join(__dirname, "images")));
 
-app.use("/api/sauces", saucesRoutes);
 app.use("/api/auth", userRoutes);
+app.use("/api/sauces", saucesRoutes);
 
 module.exports = app;
