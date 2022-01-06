@@ -1,3 +1,4 @@
+// Middleware pour ajouter des images dans le formulaire
 const multer = require("multer");
 
 const MIME_TYPES = {
